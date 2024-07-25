@@ -6,7 +6,8 @@ The application is also monitored by github action to update the docker image wh
 
 ## How to run the application locally
 prerequist:
-->  Running docker service
+
+-> Running docker service
 
 1. Please build the docker image:
 - docker-username: Your Docker account username
@@ -16,7 +17,7 @@ prerequist:
 2. Run the application locally using the following command:
 `docker run -p 8080:8080 <docker-username>/<application-name>`
 
-3. Visit localhost:8080 on your web browser. You should see the following message
+3. Visit localhost:8080 on your web browser. You should see the following message:
 
 **You're amazing**
 

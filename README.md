@@ -2,6 +2,23 @@
 
 This is a simple example on dpeloying a web application using docker and nodeJS.
 
+## How to run the application locally
+prerequist:
+- Running docker service
+
+1. Please build the docker image:
+- docker-username: Your Docker account username
+- application-name: A name you would like to give to the application
+
+`docker build -t <docker-username>/<application-name>`
+
+2. Run the application locally using the following command:
+`docker run -p 8080:8080 <docker-username>/<application-name>`
+
+3. Visit localhost:8080 on your web browser. You should see the following message
+`You're amazing`
+because you are 😃
+
 ## Dockerfile
 ```
 # specify base image

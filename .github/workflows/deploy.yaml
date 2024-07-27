@@ -9,23 +9,13 @@ on:
 env:
   DOCKER_BUILDKIT: 1
   TEST_TAG: ${{ secrets.DOCKERHUB_USERNAME }}/simple-docker-test:test
-
+  LATEST_TAG: ${{ secrets.DOCKERHUB_USERNAME}}/simple-docker:latest
+  
 # https://docs.docker.com/build/ci/github-actions/test-before-push/
 jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          # list of Docker images to use as base name for tags
-          images: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/simple-docker        
-          # generate Docker tags based on the following events/attributes
-          tags: |
-            type=sha   
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       
@@ -37,6 +27,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME}}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Get short SHA
+        id: vars
+        run: echo "GIT_SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       
       - name: Build and export to Docker
         uses: docker/build-push-action@v6
@@ -51,6 +45,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          # platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ${{ env.LATEST_TAG }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/simple-docker:${{ env.GIT_SHA_SHORT }}

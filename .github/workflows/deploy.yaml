@@ -43,14 +43,15 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           load: true
-          tags: ${{ env.TEST_TAG }}
+          tags: ${{ steps.meta.outputs.tags }}
       
       - name: Test
         run: |
-          docker run --rm ${{ env.TEST_TAG }} /bin/true      
+          docker run --rm  ${{ steps.meta.outputs.tags }} /bin/true      
       
       - name: Build and push
         uses: docker/build-push-action@v6
+        if: github.event_name != 'pull_request'
         with:
           # platforms: linux/amd64,linux/arm64
           push: true
